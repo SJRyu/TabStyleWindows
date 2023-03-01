@@ -1,0 +1,8 @@
+.vs
+x64
+
+*.exe
+*.obj
+*.o
+*.log
+*.tlog

@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\directx">
+      <UniqueIdentifier>{13113083-f577-4458-957e-10a2c695bbfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\windows">
+      <UniqueIdentifier>{81191603-0085-4590-989b-7322c0a74d8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\cctrl">
+      <UniqueIdentifier>{44a4dfd3-fa65-4aa9-a61b-4e87aa7cb023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\template">
+      <UniqueIdentifier>{b42736b9-a048-49cd-a547-d8d2ab8a0f5c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="directx\direct3d11.interop.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\composition.interop.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="WinUIimports.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\DXimports.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\IndependentRes.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\D2dComponents.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="Win32UIThread.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\WindowProperties.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\Win32Window.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\ContainerWindow.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\D2dWindow.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\Ctab.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\CButton.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\TabWindow.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\CustomTextRenderer.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="dllexport.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\VideoComponents.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\VideoWindow.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="cctrl\CDialog.h">
+      <Filter>소스 파일\cctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\ClientWindow.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MainLoop.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="template\CRECT2.h">
+      <Filter>소스 파일\template</Filter>
+    </ClInclude>
+    <ClInclude Include="template\templates.h">
+      <Filter>소스 파일\template</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\CTextbase.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\TextRenderer.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="template\comhelp.h">
+      <Filter>소스 파일\template</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\TextDrawingEffect.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\EditableLayout.h">
+      <Filter>소스 파일\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="windows\CText.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="template\concurrency.h">
+      <Filter>소스 파일\template</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\D2dComponents.cpp">
+      <Filter>소스 파일\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32UIThread.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\Win32Window.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\ContainerWindow.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\Ctab.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\CButton1.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\CButton.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\TabWindow.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\CustomTextRenderer.cpp">
+      <Filter>소스 파일\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\VideoComponents.cpp">
+      <Filter>소스 파일\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\VideoWindow.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="cctrl\CDialog.cpp">
+      <Filter>소스 파일\cctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\ClientWindow.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="MainLoop.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\CTextbase.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\TextRenderer.cpp">
+      <Filter>소스 파일\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\TextDrawingEffect.cpp">
+      <Filter>소스 파일\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\EditableLayout.cpp">
+      <Filter>소스 파일\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\CText.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

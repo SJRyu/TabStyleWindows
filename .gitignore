@@ -1,0 +1,15 @@
+.vs
+x64
+packages
+NativeWindows2/x64
+Sample/x64
+Sample/OnvifDiscoveryCpp/x64
+Sample/SampleMultiWindow/x64
+Sample/wsdiscovery/bin
+Sample/wsdiscovery/obj
+
+*.exe
+*.obj
+*.o
+*.log
+*.tlog
