@@ -6,6 +6,7 @@ namespace NativeWindows
 {
 	class NvrTab;
 	class VideoView;
+	class TestWindow1;
 
 	// if you want background, inherit D2dWindow instead.
 	class NvrWindow : public Win32Window
@@ -17,6 +18,7 @@ namespace NativeWindows
 
 		NvrTab* tab_;
 		std::array<wunique_ptr<VideoView>, MAX_CAM_COUNT> views_;
+		wunique_ptr<TestWindow1> svgwin_;
 
 		virtual void CreateEx() override
 		{

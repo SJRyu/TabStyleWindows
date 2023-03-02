@@ -57,6 +57,12 @@
     <ClInclude Include="MyApp.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Win32Windows\TestWindow1.h">
+      <Filter>소스 파일\Win32Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SampleMultiWindow.cpp">
@@ -89,6 +95,12 @@
     <ClCompile Include="DiscoveryThread.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32Windows\TestWindow1.cpp">
+      <Filter>소스 파일\Win32Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SampleMultiWindow.rc">
@@ -108,5 +120,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>

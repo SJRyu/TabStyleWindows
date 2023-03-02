@@ -86,7 +86,11 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Shcore.lib;WindowsApp.lib;dwmapi.lib;OnvifDiscoveryCpp.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy /Y "$(ProjectDir)svg" "$(TargetDir)svg\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -120,7 +124,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Shcore.lib;WindowsApp.lib;dwmapi.lib;OnvifDiscoveryCpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shcore.lib;WindowsApp.lib;dwmapi.lib;OnvifDiscoveryCpp.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>app.manifest%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -128,6 +132,9 @@
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
+    <PreBuildEvent>
+      <Command>xcopy /Y "$(ProjectDir)svg" "$(TargetDir)svg\"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -147,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppProperties.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Dialogs\DlgCamSettings.h" />
     <ClInclude Include="DiscoveryThread.h" />
     <ClInclude Include="MyApp.h" />
@@ -157,9 +165,11 @@
     <ClInclude Include="Win32Windows\NvrWindow.h" />
     <ClInclude Include="Win32Windows\TestTab.h" />
     <ClInclude Include="Win32Windows\TestWindow.h" />
+    <ClInclude Include="Win32Windows\TestWindow1.h" />
     <ClInclude Include="Win32Windows\VideoView.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Dialogs\DlgCamSettings.cpp" />
     <ClCompile Include="DiscoveryThread.cpp" />
     <ClCompile Include="MyApp.cpp" />
@@ -172,6 +182,7 @@
     <ClCompile Include="Win32Windows\NvrWindow.cpp" />
     <ClCompile Include="Win32Windows\TestTab.cpp" />
     <ClCompile Include="Win32Windows\TestWindow.cpp" />
+    <ClCompile Include="Win32Windows\TestWindow1.cpp" />
     <ClCompile Include="Win32Windows\VideoView.cpp" />
   </ItemGroup>
   <ItemGroup>

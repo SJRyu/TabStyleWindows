@@ -9,6 +9,7 @@
 #include <Win32Windows/NvrWindow.h>
 #include <NativeWindows2/windows/CButton.h>
 #include <Win32Windows/TestTab.h>
+#include <AssetManager.h>
 
 using namespace NativeWindows;
 using namespace winrt;
@@ -18,12 +19,14 @@ HMENU MyApp::hmenu_ = nullptr;
 
 MyApp::MyApp()
 {
+	AssetManager::InitAssets();
 	hmenu_ = ::LoadMenu(GetModuleHandle(NULL), MAKEINTRESOURCE(IDR_MENU1));
 }
 
 MyApp::~MyApp()
 {
 	::DestroyMenu(hmenu_);
+	AssetManager::ReleaseAssets();
 	instance_ = nullptr;
 }
 

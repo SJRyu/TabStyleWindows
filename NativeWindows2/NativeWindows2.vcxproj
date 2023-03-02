@@ -171,6 +171,7 @@
     <ClInclude Include="windows\CButton.h" />
     <ClInclude Include="windows\ClientWindow.h" />
     <ClInclude Include="windows\ContainerWindow.h" />
+    <ClInclude Include="windows\CSvg.h" />
     <ClInclude Include="windows\Ctab.h" />
     <ClInclude Include="windows\CText.h" />
     <ClInclude Include="windows\CTextbase.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="windows\CButton1.cpp" />
     <ClCompile Include="windows\ClientWindow.cpp" />
     <ClCompile Include="windows\ContainerWindow.cpp" />
+    <ClCompile Include="windows\CSvg.cpp" />
     <ClCompile Include="windows\Ctab.cpp" />
     <ClCompile Include="windows\CText.cpp" />
     <ClCompile Include="windows\CTextbase.cpp" />
@@ -210,6 +212,7 @@
     <ClCompile Include="windows\Win32Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

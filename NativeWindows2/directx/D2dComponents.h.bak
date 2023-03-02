@@ -119,7 +119,7 @@ namespace NativeWindows
 			OUT CompositionDrawingSurface& surface, 
 			T w, T h, bool stretch = true)
 		{
-			return AddD2dVisual(surface, (float)w, (float)h, stretch);
+			return AddD2dVisual(refout, (float)w, (float)h, stretch);
 		}
 
 		inline SpriteVisual AddD2dVisual(
@@ -307,17 +307,6 @@ namespace NativeWindows
 			parentv_.InsertAtTop(rootv_);
 		}
 
-		POINT offset_;
-		D2D1::Matrix3x2F mat_;
-
-		com_ptr<ID2D1DeviceContext6> bitmapdc_;
-		com_ptr<IDXGISurface2> bmsurface_;
-		com_ptr<ID2D1Bitmap1> bitmap_;
-		D2D1_BITMAP_PROPERTIES1 bmprops_;
-
-		//DXGI_FORMAT_B8G8R8A8_UNORM
-		void CreateBitmapDc();
-
 	protected:
 
 		D2dComponents(Win32Window* window);
@@ -326,6 +315,18 @@ namespace NativeWindows
 		D2dComponents() = delete;
 		D2dComponents(const D2dComponents& r) = delete;
 		D2dComponents& operator=(const D2dComponents& r) = delete;
+		
+		POINT offset_;
+		D2D1::Matrix3x2F mat_;
+#if 1
+		com_ptr<ID2D1DeviceContext6> bitmapdc_;
+		com_ptr<IDXGISurface2> bmsurface_;
+		com_ptr<ID2D1Bitmap1> bitmap_;
+		D2D1_BITMAP_PROPERTIES1 bmprops_;
+
+		//DXGI_FORMAT_B8G8R8A8_UNORM
+		void CreateBitmapDc();
+#endif
 
 	};	
 

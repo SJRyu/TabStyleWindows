@@ -123,6 +123,9 @@
     <ClInclude Include="template\concurrency.h">
       <Filter>소스 파일\template</Filter>
     </ClInclude>
+    <ClInclude Include="windows\CSvg.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -188,8 +191,15 @@
     <ClCompile Include="windows\CText.cpp">
       <Filter>소스 파일\windows</Filter>
     </ClCompile>
+    <ClCompile Include="windows\CSvg.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>

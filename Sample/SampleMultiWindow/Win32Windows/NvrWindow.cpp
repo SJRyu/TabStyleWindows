@@ -3,6 +3,7 @@
 #include <Win32Windows/NvrTab.h>
 #include <NativeWindows2/windows/ClientWindow.h>
 #include <Win32Windows/VideoView.h>
+#include <Win32Windows/TestWindow1.h>
 
 using namespace NativeWindows;
 
@@ -18,6 +19,7 @@ NvrWindow::~NvrWindow()
 
 VOID NvrWindow::OnClose()
 {
+	svgwin_.reset();
 	std::fill(views_.begin(), views_.end(), nullptr);
 }
 
@@ -38,6 +40,16 @@ LRESULT NvrWindow::OnCreate(LPCREATESTRUCT createstr)
 		views_[pos]->CreateEx();
 	}
 
+	x = rect_.width / 2;
+	y = rect_.height / 2;
+	int cx = DpiVal(120), cy = DpiVal(120);
+	x -= cx / 2;
+	y -= cy / 2;
+	RECT rect{ x, y, x + cx, y + cy };
+	svgwin_ = wmake_unique<TestWindow1>(WinArgs{ &rect, 0, this });
+	svgwin_->CreateEx();
+	svgwin_->ShowWindow();
+
 	return 0;
 }
 
@@ -55,6 +67,15 @@ LRESULT NvrWindow::OnSize(WPARAM state, int width, int height)
 			x, y, cw, ch,
 			SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
 	}
+
+	x = rect_.width / 2;
+	y = rect_.height / 2;
+	int cx = DpiVal(120), cy = DpiVal(120);
+	x -= cx / 2;
+	y -= cy / 2;
+	svgwin_->SetWindowPos(HWND_TOP,
+		x, y, cx, cy,
+		SWP_NOACTIVATE | SWP_NOREDRAW1);
 
 	return 0;
 }
