@@ -216,6 +216,11 @@ namespace NativeWindows
 		inline virtual LRESULT CALLBACK OnHScrollCmd(WPARAM wp, LPARAM lp) { return 0; }
 		inline virtual LRESULT CALLBACK OnVScrollCmd(WPARAM wp, LPARAM lp) { return 0; }
 		inline virtual LRESULT CALLBACK OnVbi(WPARAM wp, LPARAM lp) { return 0; }
+		inline virtual void CALLBACK OnClientResize(WPARAM wp, LPARAM lp) 
+		{ 
+			SetWindowPos(0, 0, 0, (int)wp, (int)lp,
+				SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
+		}
 
 		inline virtual LRESULT CALLBACK UserMsgHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{

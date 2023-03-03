@@ -14,17 +14,15 @@ Win32UIThread::Win32UIThread()
 	);
 	assert(evStarted_ != nullptr);
 
-	//InitializeCriticalSection(&csection_);
-	hSem_ = CreateSemaphore(NULL, 1, 1, NULL);
-	assert(hSem_ != NULL);
+	assert(InitializeCriticalSectionAndSpinCount(
+		&csvbi_, 4000) != 0);
 }
 
 Win32UIThread::~Win32UIThread()
 {
 	Close();
 	SafeClose(&evStarted_);
-	//DeleteCriticalSection(&csection_);
-	SafeClose(&hSem_);
+	DeleteCriticalSection(&csvbi_);
 }
 
 void Win32UIThread::Start()
@@ -115,11 +113,7 @@ Win32UIThread::DispatchAsync(winrt::Windows::System::DispatcherQueue queue)
 
 DWORD Win32UIThread::threadroutine()
 {
-#if 0
-	DispatchAsync(controller_.DispatcherQueue()).get();
-#else
 	winrt::init_apartment(apartment_type::single_threaded);
-
 	winrt::Windows::System::DispatcherQueueController controller{ nullptr };
 	DispatcherQueueOptions qopt = {
 		sizeof(DispatcherQueueOptions),
@@ -128,7 +122,6 @@ DWORD Win32UIThread::threadroutine()
 		qopt, reinterpret_cast<
 		ABI::Windows::System::IDispatcherQueueController**>(put_abi(controller))));
 	res_->InitIndependentRes();
-#endif
 
 	IsGUIThread(TRUE);
 	hmsgw_ = ::CreateWindowEx(
@@ -137,15 +130,69 @@ DWORD Win32UIThread::threadroutine()
 		0, 0, 0, 0, 0, 0, 
 		HWND_MESSAGE, 
 		0, g_hinst, 0);
+#if 0
+	// for the scrolling, 
+	concurrency::cancellation_token_source cts;
+	auto ct = cts.get_token();
+	auto vbitask = concurrency::create_task([&]
+		{
+			while (true)
+			{
+				if (ct.is_canceled()) break;
 
+				DwmFlush();
+
+				EnterCriticalSection(&csvbi_);
+				for (auto hwnd : hwndsforvbi_)
+				{
+					PostMessage(hwnd, UM_VBLANK, 0, 0);
+				}
+				LeaveCriticalSection(&csvbi_);
+			}
+		}, ct);
+#endif
 	OnThreadStarts(this);
 	SetEvent(evStarted_);
 
 	handlemsg();
-
+#if 0
+	cts.cancel();
+	vbitask.wait();
+#endif
 	res_->ReleaseIndependentRes();
 
 	OnThreadEnds(this);
 	ResetEvent(evStarted_);
 	return 0;
+}
+
+void Win32UIThread::RegistVbiMsg(HWND hwnd)
+{
+	EnterCriticalSection(&csvbi_);
+	hwndsforvbi_.push_back(hwnd);
+	LeaveCriticalSection(&csvbi_);
+}
+
+void Win32UIThread::UnregistVbiMsg(HWND hwnd)
+{
+	EnterCriticalSection(&csvbi_);
+
+	hwndsforvbi_.remove(hwnd);
+
+	LeaveCriticalSection(&csvbi_);
+}
+
+bool Win32UIThread::IsRegistedVbi(HWND hwnd)
+{
+	bool ret = false;
+
+	EnterCriticalSection(&csvbi_);
+
+	auto it = std::find(hwndsforvbi_.begin(), hwndsforvbi_.end(), hwnd);
+
+	if (it != hwndsforvbi_.end()) ret = true;
+
+	LeaveCriticalSection(&csvbi_);
+
+	return ret;
 }

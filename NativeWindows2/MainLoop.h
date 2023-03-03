@@ -23,10 +23,6 @@ namespace NativeWindows
 
 		std::list<wunique_ptr<ContainerWindow>> windows_;
 
-		void RegistVbiMsg(HWND hwnd);
-		void UnregistVbiMsg(HWND hwnd);
-		bool IsRegistedVbi(HWND hwnd);
-
 		ContainerWindow* NewContainer(RECT& rect);
 		ContainerWindow* FindDock(int x, int y);
 		void CloseContainer(uintptr_t instance);
@@ -36,9 +32,6 @@ namespace NativeWindows
 	protected:
 
 		MainLoop();
-
-		CRITICAL_SECTION csvbi_;
-		std::list<HWND> hwndsforvbi_;
 
 		virtual void CALLBACK OnAppStart() = 0;
 		virtual void CALLBACK OnAppEnd() = 0;

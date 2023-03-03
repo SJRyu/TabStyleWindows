@@ -359,9 +359,7 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	case UM_CLIENT_RESIZE:
 	{
-		SetWindowPos(0,
-			0, 0, (int)wParam, (int)lParam,
-			SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
+		OnClientResize(wParam, lParam);
 		return 0;
 	}
 	case UM_ROOT_CHANGED:

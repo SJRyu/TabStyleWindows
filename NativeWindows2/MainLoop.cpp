@@ -12,13 +12,10 @@ using namespace winrt;
 
 MainLoop::MainLoop()
 {
-	assert(InitializeCriticalSectionAndSpinCount(
-		&csvbi_, 4000) != 0);
 }
 
 MainLoop::~MainLoop()
 {
-	DeleteCriticalSection(&csvbi_);
 }
 
 void MainLoop::Start()
@@ -44,28 +41,7 @@ void MainLoop::Start()
 		0, 0, 0, 0, 0, 0,
 		HWND_MESSAGE,
 		0, g_hinst, 0);
-#if 0
-	// for the scrolling, 
-	// but i think this better being placed on zoom and scroll control
-	concurrency::cancellation_token_source cts;
-	auto ct = cts.get_token();
-	auto vbitask = concurrency::create_task([&]
-		{
-			while (true)
-			{
-				if (ct.is_canceled()) break;
 
-				DwmFlush();
-
-				EnterCriticalSection(&csvbi_);
-				for (auto hwnd : hwndsforvbi_)
-				{
-					PostMessage(hwnd, UM_VBLANK, 0, 0);
-				}
-				LeaveCriticalSection(&csvbi_);
-			}
-		}, ct);
-#endif
 	SetEvent(evStarted_);
 
 	OnAppStart();
@@ -101,9 +77,6 @@ void MainLoop::Start()
 		break;
 		}
 	}
-
-	//cts.cancel();
-	//vbitask.wait();
 
 	OnAppEnd();
 
@@ -185,35 +158,4 @@ void MainLoop::DockContainer()
 void MainLoop::SplitContainer()
 {
 
-}
-
-void MainLoop::RegistVbiMsg(HWND hwnd)
-{
-	EnterCriticalSection(&csvbi_);
-	hwndsforvbi_.push_back(hwnd);
-	LeaveCriticalSection(&csvbi_);
-}
-
-void MainLoop::UnregistVbiMsg(HWND hwnd)
-{
-	EnterCriticalSection(&csvbi_);
-
-	hwndsforvbi_.remove(hwnd);
-
-	LeaveCriticalSection(&csvbi_);
-}
-
-bool MainLoop::IsRegistedVbi(HWND hwnd)
-{
-	bool ret = false;
-
-	EnterCriticalSection(&csvbi_);
-
-	auto it = std::find(hwndsforvbi_.begin(), hwndsforvbi_.end(), hwnd);
-
-	if (it != hwndsforvbi_.end()) ret = true;
-
-	LeaveCriticalSection(&csvbi_);
-
-	return ret;
 }
