@@ -62,6 +62,7 @@ namespace NativeWindows
 		//Win32Window* owner_ = nullptr;
 
 		bool isSizing_ = false;
+		bool bScroll_ = false;
 
 		DWORD wstylex_ = 0;
 		DWORD wstyle_ = 0;

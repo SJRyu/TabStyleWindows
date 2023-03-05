@@ -1,12 +1,12 @@
 #pragma once
 
-#include <NativeWindows2/windows/Win32Window.h>
+#include <NativeWindows2/windows/D2dWindow.h>
 
 namespace NativeWindows
 {
 	class TestTab;
 
-	class TestWindow : public Win32Window
+	class TestWindow : public D2dWindow
 	{
 	public:
 
@@ -17,9 +17,9 @@ namespace NativeWindows
 
 	protected:
 
-		virtual LRESULT CALLBACK OnCreate(LPCREATESTRUCT createstr) override;
+		virtual LRESULT CALLBACK OnCreate1(LPCREATESTRUCT createstr) override;
 		virtual LRESULT CALLBACK OnSize(WPARAM state, int width, int height) override;
-		virtual VOID CALLBACK OnClose() override;
+		virtual VOID CALLBACK OnClose1() override;
 
 	};
 }

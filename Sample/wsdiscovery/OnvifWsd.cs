@@ -1,4 +1,4 @@
-﻿#define DEBUG_WSD
+﻿//#define DEBUG_WSD
 //#define DEBUG_CONSOLE
 #define STUPIDCAM
 

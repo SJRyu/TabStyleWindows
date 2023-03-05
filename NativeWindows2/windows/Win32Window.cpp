@@ -235,6 +235,10 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		rect_.width = width;
 		rect_.height = height;
+		if (bScroll_)
+		{
+			::PostMessage(parent_->hwnd_, UM_CHILD_SIZE, width, height);
+		}
 		return OnSize(wParam, width, height);
 	}
 	case WM_MOVE:
@@ -244,6 +248,10 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		rect_.MoveToXY(x, y);
 
+		if (bScroll_)
+		{
+			::PostMessage(parent_->hwnd_, UM_CHILD_MOVE, x, y);
+		}
 		return OnMove(x, y);
 	}
 	case WM_ENTERSIZEMOVE:
@@ -328,14 +336,6 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		return OnCButtonClicked(wParam, lParam);
 	}
-	case UM_HSCROLL:
-	{
-		return OnHScrollCmd(wParam, lParam);
-	}
-	case UM_VSCROLL:
-	{
-		return OnVScrollCmd(wParam, lParam);
-	}
 	case UM_DPICHANGED_AFTERPARENT:
 	{
 		return OnDpichangedAfterparent();
@@ -347,7 +347,6 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_SHOWWINDOW:
 	{
-		//DwmFlush();
 		break;
 	}
 	case WM_CREATE:
@@ -525,14 +524,6 @@ LRESULT Win32Window::WndProcForRoot(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 	case UM_BTNCLICKED:
 	{
 		return OnCButtonClicked(wParam, lParam);
-	}
-	case UM_HSCROLL:
-	{
-		return OnHScrollCmd(wParam, lParam);
-	}
-	case UM_VSCROLL:
-	{
-		return OnVScrollCmd(wParam, lParam);
 	}
 	case WM_DPICHANGED:
 	{

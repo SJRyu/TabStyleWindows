@@ -173,6 +173,12 @@ void VideoComponents::OnVideoArrive(ID3D11Texture2D* frames, UINT idx)
 	D3D11_TEXTURE2D_DESC desc;
 	backbuffer_->GetDesc(&desc);
 
+	// We might be able to straight up present it without copy.
+	// Windows 11 :
+	// https://learn.microsoft.com/windows/win32/comp_swapchain/comp-swapchain-examples
+	// Windows 10 :
+	// Can we just use the surface from "IDXGIResource1::CreateSharedHandle" and bind it to visual?
+	// Maybe the surface from the sharedhandle already has copy process.
 	d3dDc_->CopySubresourceRegion1(
 		backbuffer_.get(), 0,
 		0, 0, 0,

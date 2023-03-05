@@ -6,22 +6,19 @@
 using namespace NativeWindows;
 
 TestWindow::TestWindow(TestTab* tab) :
-	Win32Window({ 0, 0, tab->client_.get()}), tab_(tab)
+	D2dWindow({ 0, 0, tab->client_.get()}), tab_(tab)
 {
-	wstyle_ |= WS_VISIBLE;
 }
 
 TestWindow::~TestWindow()
 {
-	dbg_msg("tw deeleted");
 }
 
-VOID TestWindow::OnClose()
+VOID TestWindow::OnClose1()
 {
-	dbg_msg("tw closed");
 }
 
-LRESULT TestWindow::OnCreate(LPCREATESTRUCT createstr)
+LRESULT TestWindow::OnCreate1(LPCREATESTRUCT createstr)
 {
 
 	return 0;

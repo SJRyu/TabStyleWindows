@@ -8,6 +8,14 @@ namespace NativeWindows
 	using namespace winrt;
 	using namespace Windows::UI;
 
+	struct Win32MsgArgs
+	{
+		HWND hwnd;
+		UINT msg;
+		WPARAM wp;
+		LPARAM lp;
+	};
+
 	enum hoverstatus : int
 	{
 		hover_none,
@@ -39,10 +47,13 @@ namespace NativeWindows
 
 		UM_BTNCLICKED,
 		UM_VBLANK,
-		UM_SCROLL,
-		UM_SCROLLDONE,
-		UM_HSCROLL,
-		UM_VSCROLL,
+		
+		UM_CHILD_SIZE,
+		UM_CHILD_MOVE,
+		UM_VSCROLL_UP,
+		UM_VSCROLL_DOWN,
+		UM_HSCROLL_UP,
+		UM_HSCROLL_DOWN,
 
 		UM_TAB_ADD,
 		UM_TAB_REMOVE,
@@ -95,6 +106,6 @@ namespace NativeWindows
 
 	inline constexpr UINT SWP_NOREDRAW1 = SWP_NOREDRAW | SWP_NOSENDCHANGING | SWP_NOCOPYBITS;
 
-	inline constexpr LONG SCROLLBARTHICK = 8;
-	inline constexpr LONG SCROLLUNITPIXEL = 40;
+	inline constexpr LONG SCROLLBARTHICK = 12;
+	inline constexpr LONG SCROLLUNITPIXEL = 30;
 };

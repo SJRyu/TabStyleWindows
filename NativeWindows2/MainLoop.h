@@ -26,12 +26,17 @@ namespace NativeWindows
 		ContainerWindow* NewContainer(RECT& rect);
 		ContainerWindow* FindDock(int x, int y);
 		void CloseContainer(uintptr_t instance);
-		void DockContainer();
-		void SplitContainer();
+
+		void QueueVbiMsg(Win32MsgArgs const& msg);
+		void ClearVbiMsg(HWND hwnd); // Probably we don't need this. 
 
 	protected:
 
 		MainLoop();
+
+		CRITICAL_SECTION csvbi_;
+
+		std::deque<Win32MsgArgs> msgsOnVbi_;
 
 		virtual void CALLBACK OnAppStart() = 0;
 		virtual void CALLBACK OnAppEnd() = 0;

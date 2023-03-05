@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NativeWindows2/windows/Win32Window.h>
+#include <NativeWindows2/windows/ScrollWindow.h>
 
 namespace NativeWindows
 {
@@ -9,7 +9,7 @@ namespace NativeWindows
 	class Ctab;
 	class ContainerWindow;
 
-	class ClientWindow : public Win32Window
+	class ClientWindow : public ScrollWindow
 	{
 	public:
 		ClientWindow(TabWindow* tab);
@@ -25,9 +25,9 @@ namespace NativeWindows
 
 	protected:
 
-		virtual LRESULT CALLBACK OnCreate(LPCREATESTRUCT createstr) override;
-		virtual LRESULT CALLBACK OnSize(WPARAM state, int width, int height) override;
-		virtual void CALLBACK OnClose() override;
+		virtual LRESULT CALLBACK OnCreate1(LPCREATESTRUCT createstr) override;
+		virtual LRESULT CALLBACK OnSize1(WPARAM state, int width, int height) override;
+		virtual void CALLBACK OnClose1() override;
 
 	};
 }

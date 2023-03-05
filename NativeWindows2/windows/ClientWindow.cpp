@@ -6,7 +6,7 @@
 #include <NativeWindows2/Win32UIThread.h>
 
 ClientWindow::ClientWindow(TabWindow* tab) :
-	Win32Window({ 0, 0, tab->refcontainer_ }), 
+	ScrollWindow({ 0, 0, tab->refcontainer_ }), 
 	tab_(tab), container_(tab->refcontainer_)
 {
 
@@ -36,24 +36,25 @@ HWND ClientWindow::SetParent(Win32Window* parent)
 	return ret;
 }
 
-void ClientWindow::OnClose()
+void ClientWindow::OnClose1()
 {
 	content_.reset();
 	thread_.reset();
 }
 
-LRESULT ClientWindow::OnCreate(LPCREATESTRUCT createstr)
+LRESULT ClientWindow::OnCreate1(LPCREATESTRUCT createstr)
 {
 	thread_ = std::make_unique<Win32UIThread>();
 	thread_->Start();
 	content_->thread_ = thread_.get();
 	content_->rect_ = { 0, 0, rect_.width, rect_.height };
+	SetTarget(content_.get());
 	content_->CreateEx1();
 
 	return 0;
 }
 
-LRESULT ClientWindow::OnSize(WPARAM state, int width, int height)
+LRESULT ClientWindow::OnSize1(WPARAM state, int width, int height)
 {
 	::PostMessage(content_->hwnd_, UM_CLIENT_RESIZE, (WPARAM)width, (LPARAM)height);
 	return 0;

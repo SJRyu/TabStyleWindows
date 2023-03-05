@@ -12,10 +12,13 @@ using namespace winrt;
 
 MainLoop::MainLoop()
 {
+	assert(InitializeCriticalSectionAndSpinCount(
+		&csvbi_, 4000) != 0);
 }
 
 MainLoop::~MainLoop()
 {
+	DeleteCriticalSection(&csvbi_);
 }
 
 void MainLoop::Start()
@@ -34,6 +37,27 @@ void MainLoop::Start()
 	IsGUIThread(TRUE);
 	threadid_ = GetCurrentThreadId();
 	hthread_ = GetCurrentThread();
+
+	concurrency::cancellation_token_source cts;
+	auto ct = cts.get_token();
+	auto vbitask = concurrency::create_task([&]
+		{
+			while (true)
+			{
+				if (ct.is_canceled()) break;
+
+				DwmFlush();
+
+				EnterCriticalSection(&csvbi_);
+				for (int i = 0; i < msgsOnVbi_.size(); i++)
+				{
+					auto& msg = msgsOnVbi_.front();
+					::PostMessage(msg.hwnd, msg.msg, msg.wp, msg.lp);
+					msgsOnVbi_.pop_front();
+				}
+				LeaveCriticalSection(&csvbi_);
+			}
+		}, ct);
 
 	hmsgw_ = ::CreateWindowEx(
 		0,
@@ -79,6 +103,9 @@ void MainLoop::Start()
 	}
 
 	OnAppEnd();
+
+	cts.cancel();
+	vbitask.wait();
 
 	res_->ReleaseIndependentRes();
 	ResetEvent(evStarted_);
@@ -150,12 +177,30 @@ void MainLoop::CloseContainer(uintptr_t instance)
 	}
 }
 
-void MainLoop::DockContainer()
+void MainLoop::QueueVbiMsg(Win32MsgArgs const& msg)
 {
-
+	EnterCriticalSection(&csvbi_);
+	msgsOnVbi_.push_back(msg);
+	LeaveCriticalSection(&csvbi_);
 }
 
-void MainLoop::SplitContainer()
+void MainLoop::ClearVbiMsg(HWND hwnd)
 {
-
+	// Probably we don't need this. 
+	EnterCriticalSection(&csvbi_);
+	msgsOnVbi_.erase(std::remove_if(
+		msgsOnVbi_.begin(), msgsOnVbi_.end(),
+		[hwnd](Win32MsgArgs& el)
+		{
+			if (el.hwnd == hwnd)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	), msgsOnVbi_.end());
+	LeaveCriticalSection(&csvbi_);
 }

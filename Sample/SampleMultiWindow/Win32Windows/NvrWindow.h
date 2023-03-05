@@ -54,8 +54,8 @@ namespace NativeWindows
 
 	protected:
 
-		static constexpr int MIN_WIDTH = 960;
-		static constexpr int MIN_HEIGHT = 640;
+		static constexpr int MIN_WIDTH = 1280;
+		static constexpr int MIN_HEIGHT = 720;
 
 		void WINAPI CalcChildRect(int pos, CRECT<LONG>* outref);
 

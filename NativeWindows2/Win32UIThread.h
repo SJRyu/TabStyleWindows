@@ -36,14 +36,7 @@ namespace NativeWindows
 			return res_.get();
 		}
 
-		void RegistVbiMsg(HWND hwnd);
-		void UnregistVbiMsg(HWND hwnd);
-		bool IsRegistedVbi(HWND hwnd);
-
 	protected:
-		
-		CRITICAL_SECTION csvbi_;
-		std::list<HWND> hwndsforvbi_;
 
 		//winrt::fire_and_forget DispatchAsync(winrt::Windows::System::DispatcherQueue queue);
 		winrt::Windows::Foundation::IAsyncAction DispatchAsync(winrt::Windows::System::DispatcherQueue queue);
