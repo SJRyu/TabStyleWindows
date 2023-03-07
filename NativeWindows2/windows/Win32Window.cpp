@@ -336,6 +336,13 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		return OnCButtonClicked(wParam, lParam);
 	}
+#if 0
+	case WM_DPICHANGED_BEFOREPARENT:
+	{
+		OnDpichangedBeforeparent();
+		break;
+	}
+#endif
 	case UM_DPICHANGED_AFTERPARENT:
 	{
 		return OnDpichangedAfterparent();

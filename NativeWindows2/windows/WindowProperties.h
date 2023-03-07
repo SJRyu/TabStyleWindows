@@ -54,6 +54,7 @@ namespace NativeWindows
 		UM_VSCROLL_DOWN,
 		UM_HSCROLL_UP,
 		UM_HSCROLL_DOWN,
+		UM_SCROLLCHANGED,
 
 		UM_TAB_ADD,
 		UM_TAB_REMOVE,
@@ -106,6 +107,6 @@ namespace NativeWindows
 
 	inline constexpr UINT SWP_NOREDRAW1 = SWP_NOREDRAW | SWP_NOSENDCHANGING | SWP_NOCOPYBITS;
 
-	inline constexpr LONG SCROLLBARTHICK = 12;
+	inline constexpr LONG SCROLLBARTHICK = 16;
 	inline constexpr LONG SCROLLUNITPIXEL = 30;
 };

@@ -22,7 +22,7 @@ DlgCamSettings::~DlgCamSettings()
 
 void DlgCamSettings::UpdateList()
 {
-	auto app = MyApp::getInstance();
+	auto app = MyApp::GetInstance();
 	app->GetResolvedEndpoints(&eplist_);
 
 	ListView_DeleteAllItems(hList_);

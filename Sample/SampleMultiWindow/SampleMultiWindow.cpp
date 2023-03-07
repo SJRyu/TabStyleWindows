@@ -12,7 +12,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
     
-    auto ml = NativeWindows::MyApp::getInstance();
+    auto ml = NativeWindows::MyApp::GetInstance();
     ml->Start();
     delete ml;
 

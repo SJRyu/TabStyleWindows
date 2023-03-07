@@ -14,7 +14,6 @@
 using namespace NativeWindows;
 using namespace winrt;
 
-MyApp* MyApp::instance_ = nullptr;
 HMENU MyApp::hmenu_ = nullptr;
 
 MyApp::MyApp()

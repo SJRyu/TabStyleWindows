@@ -44,12 +44,14 @@ void ClientWindow::OnClose1()
 
 LRESULT ClientWindow::OnCreate1(LPCREATESTRUCT createstr)
 {
+	visualbg_ = AddColorVisual(Windows::UI::Colors::White());
+
 	thread_ = std::make_unique<Win32UIThread>();
 	thread_->Start();
 	content_->thread_ = thread_.get();
 	content_->rect_ = { 0, 0, rect_.width, rect_.height };
-	SetTarget(content_.get());
 	content_->CreateEx1();
+	SetTarget(content_.get());
 
 	return 0;
 }

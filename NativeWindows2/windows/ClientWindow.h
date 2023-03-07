@@ -19,6 +19,8 @@ namespace NativeWindows
 		wunique_ptr<Win32Window> content_;
 		TabWindow* tab_;
 		ContainerWindow* container_;
+
+		SpriteVisual visualbg_{ nullptr };
 		
 		virtual void CreateEx() override;
 		virtual HWND SetParent(Win32Window* parent) override;

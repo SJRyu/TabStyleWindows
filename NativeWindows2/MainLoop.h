@@ -11,6 +11,11 @@ namespace NativeWindows
 	{
 	public:
 
+		static inline auto GetInstance()
+		{
+			return instance_;
+		}
+
 		MainLoop(MainLoop const& ref) = delete;
 		MainLoop(MainLoop const&& ref) = delete;
 		MainLoop& operator=(MainLoop const& ref) = delete;
@@ -31,6 +36,8 @@ namespace NativeWindows
 		void ClearVbiMsg(HWND hwnd); // Probably we don't need this. 
 
 	protected:
+
+		static inline MainLoop* instance_ = nullptr;
 
 		MainLoop();
 

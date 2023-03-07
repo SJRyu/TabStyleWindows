@@ -181,7 +181,7 @@ namespace NativeWindows
 		inline virtual void CALLBACK OnClose() {}
 		inline virtual void CALLBACK OnDestroy() {}
 		inline virtual void CALLBACK OnDpichanged(UINT uMsg, WPARAM wParam, LPARAM lParam) {}
-		//inline virtual LRESULT CALLBACK OnDpichangedBeforeparent() { return 0; }
+		//inline virtual void CALLBACK OnDpichangedBeforeparent() { }
 		inline virtual LRESULT CALLBACK OnDpichangedAfterparent() { return 0; }
 
 		inline virtual LRESULT OnNcHitTest(LPARAM lParam)
@@ -220,7 +220,7 @@ namespace NativeWindows
 		inline virtual void CALLBACK OnClientResize(WPARAM wp, LPARAM lp) 
 		{ 
 			SetWindowPos(0, 0, 0, (int)wp, (int)lp,
-				SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
+				SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOREDRAW1);
 		}
 
 		inline virtual LRESULT CALLBACK UserMsgHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

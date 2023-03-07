@@ -129,6 +129,9 @@
     <ClInclude Include="windows\ScrollWindow.h">
       <Filter>소스 파일\windows</Filter>
     </ClInclude>
+    <ClInclude Include="windows\Scrollbar.h">
+      <Filter>소스 파일\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -198,6 +201,9 @@
       <Filter>소스 파일\windows</Filter>
     </ClCompile>
     <ClCompile Include="windows\ScrollWindow.cpp">
+      <Filter>소스 파일\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\Scrollbar.cpp">
       <Filter>소스 파일\windows</Filter>
     </ClCompile>
   </ItemGroup>

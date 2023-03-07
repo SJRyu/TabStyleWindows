@@ -15,13 +15,13 @@ namespace NativeWindows
 
 		virtual ~MyApp();
 
-		static MyApp* getInstance()
+		static inline MyApp* GetInstance()
 		{
 			if (instance_ == nullptr)
 			{
 				instance_ = new MyApp();
 			}
-			return instance_;
+			return (MyApp*)instance_;
 		}
 
 		inline void GetResolvedEndpoints(
@@ -42,7 +42,7 @@ namespace NativeWindows
 
 		MyApp();
 		
-		static MyApp* instance_;
+		//static MyApp* instance_;
 		DiscoveryThread* discoveryThread_ = nullptr;
 
 		virtual void CALLBACK OnAppStart() override;

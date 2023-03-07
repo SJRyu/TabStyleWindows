@@ -176,6 +176,7 @@
     <ClInclude Include="windows\CText.h" />
     <ClInclude Include="windows\CTextbase.h" />
     <ClInclude Include="windows\D2dWindow.h" />
+    <ClInclude Include="windows\Scrollbar.h" />
     <ClInclude Include="windows\ScrollWindow.h" />
     <ClInclude Include="windows\TabWindow.h" />
     <ClInclude Include="windows\VideoWindow.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="windows\Ctab.cpp" />
     <ClCompile Include="windows\CText.cpp" />
     <ClCompile Include="windows\CTextbase.cpp" />
+    <ClCompile Include="windows\Scrollbar.cpp" />
     <ClCompile Include="windows\ScrollWindow.cpp" />
     <ClCompile Include="windows\TabWindow.cpp" />
     <ClCompile Include="windows\VideoWindow.cpp" />
