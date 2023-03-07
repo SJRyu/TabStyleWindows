@@ -13,5 +13,5 @@ In a brief, DComp is just better. Modern webbrowsers use dcomp as its backend on
 But regardless of that fact, WinUI is still not able to be a better option. Cuz It has got restriced in threading, which is huge difference between dcomp and winui. 
 With WinUI Composition, as a pros and cons at sametime, You are not allowed to program your own threading and dispatch model for composition batch/commit operations, in the otherwords, You are not allowed to make threading per each visual, which is an huge defect.
 
-For an example, in this project, I devide composition windows into D2dWindow and D2dWindow1.
-Cuz I can't use single visual tree when i make multithread for windows and their visuals. And My project probably use more threads and resources by the winui, compared to using single visual tree with dcomp.
+For an example, in this project, I divide composition windows into D2dWindow and D2dWindow1.
+Cuz I can't use single visual tree when I make multithread for windows and their visuals. And My project probably use more threads and resources by the winui, compared to using single visual tree with dcomp.
