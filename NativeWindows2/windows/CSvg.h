@@ -23,7 +23,7 @@ namespace NativeWindows
 		};
 
 		void SetSvg(IStream* stream);
-		void DrawSvg();
+		void WINAPI DrawSvg(int width, int height);
 
 	protected:
 

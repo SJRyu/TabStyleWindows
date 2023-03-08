@@ -31,7 +31,7 @@ LRESULT TestWindow1::OnCreate1(LPCREATESTRUCT createstr)
 
 LRESULT TestWindow1::OnSize(WPARAM state, int width, int height)
 {
-	csvg_->DrawSvg();
+	csvg_->DrawSvg(width, height);
 
 	return 0;
 }
