@@ -9,7 +9,7 @@ You can see basic operations on windows and dialog with that.
 deved with VS2022, C++17, x64.
 
 # WinUI Composition VS DirectComposition
-In a brief, WinUI is more simple to use, but less flexible than dcomp. Modern webbrowsers use dcomp as its backend on Windows. Ofc, At the time when they developed, C++/WinRT didn't even exist. 
+In a brief, WinUI is more simple to use, but less flexible than dcomp. Modern webbrowsers use dcomp as its backend on Windows. Ofc, At that time when they developed, C++/WinRT didn't even exist. 
 But regardless of that fact, WinUI is still not able to be a better option. Cuz It has got restriced in threading, which is huge difference between dcomp and winui. 
 With WinUI Composition, as a pros and cons at sametime, You don't need to(and you can't) program your own threading and dispatch model for composition batch/commit operations, in the otherwords, You are not allowed to make threading per each visual, which is an defect.
 
