@@ -9,4 +9,4 @@ You can see basic operations on windows and dialog with that.
 deved with VS2022, C++17, x64.
 
 ToDo: Make client window has no childwindow. just single windowing with custom visual objects.
-So, I need to build new object interfaces which reprent visuals and interact with inputs. 
+I need to build new object interfaces which reprent visuals and interact with inputs. 
