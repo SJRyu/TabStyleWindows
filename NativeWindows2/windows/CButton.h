@@ -113,6 +113,18 @@ namespace NativeWindows
 		virtual LRESULT CALLBACK OnCreate1(LPCREATESTRUCT createstr) override;
 		virtual void CALLBACK Redraw(LONG w, LONG h) override;
 
+		virtual LRESULT CALLBACK OnSize(WPARAM state, int width, int height) override
+		{
+			/*
+			After a successful call to SetWindowRgn, the system owns the region specified by the region handle hRgn.
+			The system does not make a copy of the region. Thus, you should not make any further function calls with this region handle.
+			In particular, do not delete this region handle. The system deletes the region handle when it no longer needed.
+			*/
+			auto region = ::CreateEllipticRgn(0, 0, rect_.width, rect_.height);
+			::SetWindowRgn(hwnd_, region, false);
+			return CButton::OnSize(state, width, height);
+		}
+
 		virtual void CALLBACK OnClose1() override
 		{
 			OnBtnClose(this);

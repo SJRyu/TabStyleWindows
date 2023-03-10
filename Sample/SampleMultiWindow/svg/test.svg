@@ -19,12 +19,12 @@
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
    id="svg2"
-   viewBox="0 0 744.09448819 1052.3622047">
+   viewBox="0 0 1000 1000">
   <circle
     id="head"
-    r="300"
-    cy="509"
-    cx="370"
+    r="480"
+    cy="500"
+    cx="500"
     style="fill:#ffff00;stroke:#000000;stroke-width:5" />
   <ellipse
     id="right_eye"

@@ -19,6 +19,8 @@ namespace NativeWindows
 		SpriteVisual svgvisual_{ nullptr };
 		CompositionDrawingSurface svgsurface_{ nullptr };
 
+		void UpdateRegion();
+
 		virtual LRESULT CALLBACK OnCreate1(LPCREATESTRUCT createstr) override;
 		virtual LRESULT CALLBACK OnSize(WPARAM state, int width, int height) override;
 		virtual LRESULT CALLBACK OnLbtndown(int state, int x, int y) override;
