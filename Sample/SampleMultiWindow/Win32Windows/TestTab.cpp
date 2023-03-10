@@ -16,7 +16,7 @@ TestTab::TestTab(Ctab* parent) : TabWindow(parent)
 	{
 		TestTab* tab = (TestTab*)sender;
 		auto content = new TestWindow(tab);
-		tab->client_->content_ = wunique_ptr<Win32Window>(content);
+		tab->SetContent(content);
 
 		SetTimer(tab->hwnd_, 1, 200, NULL);
 	};

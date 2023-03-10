@@ -7,8 +7,8 @@
 
 using namespace NativeWindows;
 
-NvrWindow::NvrWindow(NvrTab* tab) :
-	Win32Window({ 0, 0, tab->client_.get() }), tab_(tab)
+NvrWindow::NvrWindow(NvrTab* tab) : 
+	tab_(tab)
 {
 	wstyle_ |= WS_VISIBLE;
 }

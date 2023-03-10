@@ -2,12 +2,11 @@
 
 #include <NativeWindows2/windows/D2dWindow.h>
 
+/**
+* There is a miss location of client, when DPI changed.
+**/
 namespace NativeWindows
 {
-	/**
-	* RSJ: 사실 클라이언트를 스크롤윈도우와 같은 쓰레드로 제한하는게 낫다.
-	* 하지만, 현재코드에서 윈도우를 중간에 하나더 생성하는 것이 귀찮아, 염두만하고 넘어간다.
-	**/
 	class MainLoop;
 	class Scrollbar;
 	
@@ -35,14 +34,19 @@ namespace NativeWindows
 		ScrollWindow(WinArgs const& args);
 		virtual ~ScrollWindow();
 
-		Win32Window* target_ = nullptr;
+		wunique_ptr<Win32Window> target_;
 		MainLoop* ml_;
 
 		wunique_ptr<ScrollNotch> notch_;
 		wunique_ptr<Scrollbar> vscroll_;
 		wunique_ptr<Scrollbar> hscroll_;
 
-		void SetTarget(Win32Window* target);
+		virtual void SetTarget(Win32Window* target)
+		{
+			target->bScroll_ = true;
+			target->SetWindowArgs({ 0, 0, this, thread_ });
+			target_ = wunique_ptr<Win32Window>(target);
+		}
 
 		bool VScrollup();
 		bool VScrolldown();
@@ -52,21 +56,33 @@ namespace NativeWindows
 		//update scrollbar
 		void UpdateScroll();
 		void UpdateScrollbar();
-		int ScrollMinX();
-		int ScrollMaxX();
-		int ScrollMinY();
-		int ScrollMaxY();
 
 		void OnScrollChanged(int newcl, bool bHorizontal);
 
 	protected:
 
+		CRECT<LONG> targetRect_;
 		CRECT<LONG> clientRect_;
 
 		bool isVScrolling_ = false;
 		bool isHScrolling_ = false;
 
-		void OnScrollChanged_(int newcl, bool bHorizontal);
+		virtual void ScrollTarget(int x, int y);
+
+		virtual void CALLBACK OnTargetSize(int width, int height)
+		{
+			// in some case, we don't need to update scroll.
+			// for an example, this scroll resize target and update already. 
+			UpdateScroll();
+			UpdateScrollbar();
+		}
+		virtual void CALLBACK OnTargetMove(int x, int y) 
+		{
+			// This event would not be fired by scroll, 
+			// then we should update scroll.
+			// UpdateScroll();
+			UpdateScrollbar();
+		}
 
 		virtual LRESULT CALLBACK OnCreate(LPCREATESTRUCT createstr) override;
 		virtual LRESULT CALLBACK OnCreate1(LPCREATESTRUCT createstr) { return 0; };

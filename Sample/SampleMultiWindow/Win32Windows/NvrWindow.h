@@ -8,7 +8,6 @@ namespace NativeWindows
 	class VideoView;
 	class TestWindow1;
 
-	// if you want background, inherit D2dWindow instead.
 	class NvrWindow : public Win32Window
 	{
 	public:

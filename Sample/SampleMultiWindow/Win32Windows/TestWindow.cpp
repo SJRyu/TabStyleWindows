@@ -5,8 +5,7 @@
 
 using namespace NativeWindows;
 
-TestWindow::TestWindow(TestTab* tab) :
-	D2dWindow({ 0, 0, tab->client_.get()}), tab_(tab)
+TestWindow::TestWindow(TestTab* tab) : tab_(tab)
 {
 }
 

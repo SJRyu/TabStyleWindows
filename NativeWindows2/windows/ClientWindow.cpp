@@ -4,9 +4,10 @@
 #include <NativeWindows2/windows/Ctab.h>
 #include <NativeWindows2/windows/ContainerWindow.h>
 #include <NativeWindows2/Win32UIThread.h>
+#include <NativeWindows2/windows/Scrollbar.h>
 
 ClientWindow::ClientWindow(TabWindow* tab) :
-	ScrollWindow({ 0, 0, tab->refcontainer_ }), 
+	D2dWindow({ 0, 0, tab->refcontainer_ }), 
 	tab_(tab), container_(tab->refcontainer_)
 {
 
@@ -38,26 +39,52 @@ HWND ClientWindow::SetParent(Win32Window* parent)
 
 void ClientWindow::OnClose1()
 {
-	content_.reset();
-	thread_.reset();
+	scwin_.reset();
+	cthread_.reset();
 }
 
 LRESULT ClientWindow::OnCreate1(LPCREATESTRUCT createstr)
 {
 	visualbg_ = AddColorVisual(Windows::UI::Colors::White());
 
-	thread_ = std::make_unique<Win32UIThread>();
-	thread_->Start();
-	content_->thread_ = thread_.get();
-	content_->rect_ = { 0, 0, rect_.width, rect_.height };
-	content_->CreateEx1();
-	SetTarget(content_.get());
+	cthread_ = std::make_unique<Win32UIThread>();
+	cthread_->Start();
 
+	RECT rc = { 0, 0, rect_.width, rect_.height };
+	scwin_ = wmake_unique<ClientScroll>(WinArgs{ &rc, 0, this, cthread_.get() });
+	scwin_->SetTarget(content_);
+	scwin_->CreateEx1();
+	scwin_->ShowWindow();
+	
 	return 0;
 }
 
-LRESULT ClientWindow::OnSize1(WPARAM state, int width, int height)
+LRESULT ClientWindow::OnSize(WPARAM state, int width, int height)
 {
-	::PostMessage(content_->hwnd_, UM_CLIENT_RESIZE, (WPARAM)width, (LPARAM)height);
+	::PostMessage(scwin_->hwnd_, UM_CLIENT_RESIZE, (WPARAM)width, (LPARAM)height);
+	return 0;
+}
+
+LRESULT ClientScroll::OnSize(WPARAM state, int width, int height)
+{
+	clientRect_.right = width;
+	clientRect_.bottom = height;
+
+	auto thick = DpiVal(SCROLLBARTHICK);
+	vscroll_->SetWindowPos(0,
+		0, thick, thick, height - thick,
+		SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
+
+	hscroll_->SetWindowPos(0,
+		thick, 0, width - thick, thick,
+		SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
+
+	target_->SetWindowPos(0,
+		0, 0, width, height,
+		SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOREDRAW1);
+
+	UpdateScroll();
+	UpdateScrollbar();
+
 	return 0;
 }

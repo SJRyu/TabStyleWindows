@@ -3,11 +3,14 @@
 #include <NativeWindows2/windows/Win32Window.h>
 #include <NativeWindows2/Win32UIThread.h>
 
-Win32Window::Win32Window(WinArgs const& args) :
-	rect_(args.rect), hmenu_(args.hmenu), 
-	parent_((Win32Window*)args.parent)
+void Win32Window::SetWindowArgs(WinArgs const& args)
 {
-	evclosed_ = CreateEvent(NULL, TRUE, TRUE, NULL);
+	if (args.rect != nullptr)
+	{
+		rect_ = *args.rect;
+	}
+	hmenu_ = args.hmenu;
+	parent_ = args.parent;
 
 	if (parent_ == nullptr)
 	{
@@ -35,6 +38,17 @@ Win32Window::Win32Window(WinArgs const& args) :
 		root_ = parent_->root_;
 		ncm_ = root_->ncm_;
 	}
+}
+
+Win32Window::Win32Window()
+{
+	evclosed_ = CreateEvent(NULL, TRUE, TRUE, NULL);
+}
+
+Win32Window::Win32Window(WinArgs const& args)
+{
+	evclosed_ = CreateEvent(NULL, TRUE, TRUE, NULL);
+	SetWindowArgs(args);
 }
 
 Win32Window::~Win32Window()
@@ -237,7 +251,7 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		rect_.height = height;
 		if (bScroll_)
 		{
-			::PostMessage(parent_->hwnd_, UM_CHILD_SIZE, width, height);
+			::SendMessage(parent_->hwnd_, UM_CHILD_SIZE, width, height);
 		}
 		return OnSize(wParam, width, height);
 	}
@@ -250,15 +264,13 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		if (bScroll_)
 		{
-			::PostMessage(parent_->hwnd_, UM_CHILD_MOVE, x, y);
+			::SendMessage(parent_->hwnd_, UM_CHILD_MOVE, x, y);
 		}
 		return OnMove(x, y);
 	}
 	case WM_ENTERSIZEMOVE:
 	{
 		isSizing_ = true;
-
-		xrect_ = rect_;
 		return OnEnterSizemove();
 	}
 	case WM_EXITSIZEMOVE:
@@ -363,6 +375,10 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		ResetEvent(evclosed_);
 		return ret;
 	}
+	case UM_CLIENT_MOVE:
+	{
+		OnClientMove(wParam, lParam);
+	}
 	case UM_CLIENT_RESIZE:
 	{
 		OnClientResize(wParam, lParam);
@@ -453,8 +469,6 @@ LRESULT Win32Window::WndProcForRoot(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 	case WM_ENTERSIZEMOVE:
 	{
 		isSizing_ = true;
-
-		xrect_ = rect_;
 		return OnEnterSizemove();
 	}
 	case WM_EXITSIZEMOVE:

@@ -44,10 +44,9 @@ namespace NativeWindows
 	class NATIVEWINDOWS2_API Win32Window
 	{
 	public:
-		Win32Window* parent_;
-		HMENU hmenu_;
-		CRECT<LONG> rect_;
-		CRECT<LONG> xrect_;
+		Win32Window* parent_ = nullptr;
+		HMENU hmenu_ = nullptr;
+		CRECT<LONG> rect_{0,0,0,0};
 
 		const WCHAR* wname_ = nullptr;
 
@@ -69,11 +68,13 @@ namespace NativeWindows
 
 		HANDLE evclosed_;
 
+		Win32Window();
 		Win32Window(WinArgs const& args);
 		virtual ~Win32Window();
-		Win32Window() = delete;
 		Win32Window(Win32Window const& r) = delete;
 		Win32Window& operator=(const Win32Window& r) = delete;
+
+		void SetWindowArgs(WinArgs const& args);
 
 		//Child into child only allowed. and need samethread on parents.
 		virtual HWND SetParent(Win32Window* parent);
@@ -82,13 +83,13 @@ namespace NativeWindows
 		inline virtual void WINAPI MoveWindow(int x, int y)
 		{
 			assert(::SetWindowPos(hwnd_, 0, x, y, 0, 0,
-				SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING) == TRUE);
+				SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1) == TRUE);
 		}
 
 		inline virtual void WINAPI MoveWindowAsync(int x, int y)
 		{
 			assert(::SetWindowPos(hwnd_, 0, x, y, 0, 0,
-				SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW | SWP_NOSENDCHANGING | SWP_ASYNCWINDOWPOS) == TRUE);
+				SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1 | SWP_ASYNCWINDOWPOS) == TRUE);
 		}
 
 		inline virtual void WINAPI SetWindowPos(
@@ -217,6 +218,10 @@ namespace NativeWindows
 		inline virtual LRESULT CALLBACK OnHScrollCmd(WPARAM wp, LPARAM lp) { return 0; }
 		inline virtual LRESULT CALLBACK OnVScrollCmd(WPARAM wp, LPARAM lp) { return 0; }
 		inline virtual LRESULT CALLBACK OnVbi(WPARAM wp, LPARAM lp) { return 0; }
+		inline virtual void CALLBACK OnClientMove(WPARAM wp, LPARAM lp)
+		{
+			MoveWindow((int)wp, (int)lp);
+		}
 		inline virtual void CALLBACK OnClientResize(WPARAM wp, LPARAM lp) 
 		{ 
 			SetWindowPos(0, 0, 0, (int)wp, (int)lp,

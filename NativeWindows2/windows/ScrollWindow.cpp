@@ -16,9 +16,12 @@ ScrollWindow::~ScrollWindow()
 
 void ScrollWindow::OnClose()
 {
+	hscroll_.reset();
 	vscroll_.reset();
 	notch_.reset();
-	ml_->ClearVbiMsg(hwnd_); //probably we don't need this 
+	target_.reset();
+	ml_->ClearVbiMsg(hwnd_);
+
 	OnClose1();
 }
 
@@ -49,11 +52,17 @@ LRESULT ScrollWindow::OnCreate(LPCREATESTRUCT createstr)
 	hscroll_->SetWindowPos(HWND_TOP, 0, 0, 0, 0,
 		SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOREDRAW1);
 
+	targetRect_ = target_->rect_;
+	target_->CreateEx();
+
 	return OnCreate1(createstr);
 }
 
 LRESULT ScrollWindow::OnSize(WPARAM state, int width, int height)
 {
+	clientRect_.right = width;
+	clientRect_.bottom = height;
+
 	auto thick = DpiVal(SCROLLBARTHICK);
 	vscroll_->SetWindowPos(0, 
 		0, thick, thick, height - thick,
@@ -62,11 +71,6 @@ LRESULT ScrollWindow::OnSize(WPARAM state, int width, int height)
 	hscroll_->SetWindowPos(0,
 		thick, 0, width - thick, thick,
 		SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
-
-	clientRect_.right = width;
-	clientRect_.bottom = height;
-
-	//dbg_msg("onsize thick = %d", thick);
 
 	UpdateScroll();
 	UpdateScrollbar();
@@ -81,13 +85,23 @@ LRESULT ScrollWindow::OnDpichangedAfterparent()
 		0, 0, thick, thick,
 		SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOREDRAW1);
 
-	if (isVScrolling_)
-		clientRect_.left = thick;
-	if (isHScrolling_)
-		clientRect_.top = thick;
+	int dx = 0, dy = 0;
 
-	UpdateScroll();
-	UpdateScrollbar();
+	if (isVScrolling_)
+	{
+		dx = thick - clientRect_.left;
+		clientRect_.left = thick;
+	}
+	if (isHScrolling_)
+	{
+		dy = thick - clientRect_.top;
+		clientRect_.top = thick;
+	}
+
+	if (dx || dy)
+	{
+		ScrollTarget(targetRect_.left + dx, targetRect_.top + dy);
+	}
 
 	return 0;
 }
@@ -102,22 +116,22 @@ BOOL ScrollWindow::OnMouseWheel(WPARAM wp, LPARAM lp)
 	{
 		if (delta > 0)
 		{
-			ml_->QueueVbiMsg(Win32MsgArgs{ hwnd_, UM_HSCROLL_UP, 0, 0 });
+			HScrollup();
 		}
 		else
 		{
-			ml_->QueueVbiMsg(Win32MsgArgs{ hwnd_, UM_HSCROLL_DOWN, 0, 0 });
+			HScrolldown();
 		}
 	}
 	else
 	{
 		if (delta > 0)
 		{
-			ml_->QueueVbiMsg(Win32MsgArgs{ hwnd_, UM_VSCROLL_UP, 0, 0 });
+			VScrollup();
 		}
 		else
 		{
-			ml_->QueueVbiMsg(Win32MsgArgs{ hwnd_, UM_VSCROLL_DOWN, 0, 0 });
+			VScrolldown();
 		}
 	}
 
@@ -128,41 +142,29 @@ LRESULT ScrollWindow::UserMsgHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 {
 	switch (uMsg)
 	{
-	case UM_SCROLLCHANGED:
-	{
-		OnScrollChanged_((int)wParam, (bool)lParam);
-		break;
-	}
-	case UM_VSCROLL_UP:
-	{
-		VScrollup();
-		break;
-	}
-	case UM_VSCROLL_DOWN:
-	{	
-		VScrolldown();
-		break;
-	}
-	case UM_HSCROLL_UP:
-	{
-		HScrollup();
-		break;
-	}
-	case UM_HSCROLL_DOWN:
-	{
-		HScrolldown();
-		break;
-	}
 	case UM_CHILD_SIZE:
 	{
-		UpdateScroll();
-		UpdateScrollbar();
+		int width = (int)wParam;
+		int height = (int)lParam;
+
+		targetRect_.width = width;
+		targetRect_.height = height;
+
+		OnTargetSize(width, height);
 		break;
 	}
 	case UM_CHILD_MOVE:
 	{
-		UpdateScroll();
-		UpdateScrollbar();
+		int x = (int)wParam; 
+		int y = (int)lParam;
+		targetRect_.MoveToXY(x, y);
+
+		OnTargetMove(x, y);
+		break;
+	}
+	case UM_SCROLLTARGET:
+	{
+		target_->MoveWindow((int)wParam, (int)lParam);
 		break;
 	}
 	default :
@@ -172,55 +174,31 @@ LRESULT ScrollWindow::UserMsgHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 	return 0;
 }
 
-int ScrollWindow::ScrollMinX()
+void ScrollWindow::ScrollTarget(int x, int y)
 {
-	return (rect_.width - target_->rect_.width);
-}
-
-int ScrollWindow::ScrollMaxX()
-{
-	int ret = 0;
-	if (isVScrolling_)
-	{
-		ret = vscroll_->rect_.right;
-	}
-	return ret;
-}
-
-int ScrollWindow::ScrollMinY()
-{
-	return (rect_.height - target_->rect_.height);
-}
-
-int ScrollWindow::ScrollMaxY()
-{
-	int ret = 0;
-	if (isHScrolling_)
-	{
-		ret = hscroll_->rect_.bottom;
-	}
-	return ret;
+	Win32MsgArgs msg{ hwnd_, UM_SCROLLTARGET, (WPARAM)x, (LPARAM)y };
+	ml_->ClearVbiMsg(hwnd_);
+	ml_->QueueVbiMsg(msg);
 }
 
 void ScrollWindow::UpdateScrollbar()
 {
-	auto trect = target_->rect_;
 	ScrollInfo info;
 
 	if (isHScrolling_)
 	{
-		info.pageSize_ = trect.width;
+		info.pageSize_ = targetRect_.width;
 		info.clientSize_ = clientRect_.width;
-		info.clientLoc_ = clientRect_.left - trect.left;
+		info.clientLoc_ = clientRect_.left - targetRect_.left;
 
 		hscroll_->UpdateScrollbar(info);
 	}
 
 	if (isVScrolling_)
 	{
-		info.pageSize_ = trect.height;
+		info.pageSize_ = targetRect_.height;
 		info.clientSize_ = clientRect_.height;
-		info.clientLoc_ = clientRect_.top - trect.top;
+		info.clientLoc_ = clientRect_.top - targetRect_.top;
 
 		vscroll_->UpdateScrollbar(info);
 	}
@@ -229,16 +207,45 @@ void ScrollWindow::UpdateScrollbar()
 void ScrollWindow::UpdateScroll()
 {
 	//update scrollbar
-	auto trect = target_->rect_;
-	auto tw = trect.width;
-	auto th = trect.height;
+	auto tw = targetRect_.width;
+	auto th = targetRect_.height;
 
 	auto w = rect_.width;
 	auto h = rect_.height;
 	auto thick = DpiVal(SCROLLBARTHICK);
 
-	POINT pt{ trect.left, trect.top };
+	POINT pt{ targetRect_.left, targetRect_.top };
 	LONG dy = 0, dx = 0;
+
+	//bool bVs = false, bHs = false;
+	if (th > h)
+	{
+		clientRect_.left = thick;
+	}
+	else
+	{
+		clientRect_.left = 0;
+	}
+
+	if (tw > clientRect_.width)
+	{
+		if (isHScrolling_ == false)
+		{
+			dy = thick;
+			clientRect_.top = thick;
+			isHScrolling_ = true;
+			hscroll_->ShowWindow();
+		}
+	}
+	else
+	{
+		if (isHScrolling_)
+		{
+			clientRect_.top = 0;
+			isHScrolling_ = false;
+			hscroll_->ShowWindow(SW_HIDE);
+		}
+	}
 
 	if (th > clientRect_.height)
 	{
@@ -246,8 +253,8 @@ void ScrollWindow::UpdateScroll()
 		{
 			dx = thick;
 			clientRect_.left = thick;
-			vscroll_->ShowWindow();
 			isVScrolling_ = true;
+			vscroll_->ShowWindow();
 		}
 	}
 	else
@@ -257,57 +264,36 @@ void ScrollWindow::UpdateScroll()
 			clientRect_.left = 0;
 			vscroll_->ShowWindow(SW_HIDE);
 			isVScrolling_ = false;
+			vscroll_->ShowWindow(SW_HIDE);
 		}
 	}
 
-	if (tw > clientRect_.width)
+	if (isVScrolling_ && (targetRect_.bottom < clientRect_.bottom))
 	{
-		if (isHScrolling_ == false)
-		{
-			dy = thick;
-			clientRect_.top = thick;
-			hscroll_->ShowWindow();
-			isHScrolling_ = true;
-		}
-	}
-	else
-	{
-		if (isHScrolling_)
-		{
-			clientRect_.top = 0;
-			hscroll_->ShowWindow(SW_HIDE);
-			isHScrolling_ = false;
-		}
+		dy = clientRect_.bottom - targetRect_.bottom;
 	}
 
-	//dbg_msg("client = %d, %d | trect = %d, %d", 
-		//clientRect_.left, clientRect_.top, trect.left, trect.top);
-
-	if (trect.bottom < clientRect_.bottom)
+	if (targetRect_.top > clientRect_.top)
 	{
-		dy = clientRect_.bottom - trect.bottom;
+		dy = clientRect_.top - targetRect_.top;
 	}
 
-	if (trect.top > clientRect_.top)
+	if (isHScrolling_ && (targetRect_.right < clientRect_.right))
 	{
-		dy = clientRect_.top - trect.top;
+		dx = clientRect_.right - targetRect_.right;
 	}
 
-	if (trect.right < clientRect_.right)
+	if (targetRect_.left > clientRect_.left)
 	{
-		dx = clientRect_.right - trect.right;
+		dx = clientRect_.left - targetRect_.left;
 	}
-
-	if (trect.left > clientRect_.left)
-	{
-		dx = clientRect_.left - trect.left;
-	}
+	//dbg_msg("(%d, %d), thick=%d", dx, dy, thick);
 
 	if (dx || dy)
 	{
 		pt.x += dx;
 		pt.y += dy;
-		target_->MoveWindowAsync(pt.x, pt.y);
+		ScrollTarget(pt.x, pt.y);
 	}
 
 	if (isVScrolling_ || isHScrolling_)
@@ -322,52 +308,34 @@ void ScrollWindow::UpdateScroll()
 
 void ScrollWindow::OnScrollChanged(int newcl, bool bHorizontal)
 {
-	ml_->QueueVbiMsg(Win32MsgArgs{ hwnd_, UM_SCROLLCHANGED,
-			(WPARAM)newcl, (LPARAM)bHorizontal });
-}
-
-void ScrollWindow::OnScrollChanged_(int newcl, bool bHorizontal)
-{
 	int pageloc;
 	if (bHorizontal)
 	{
 		pageloc = clientRect_.left - newcl;
-		//dbg_msg("pageloc = %d", pageloc);
-		target_->MoveWindowAsync(pageloc, target_->rect_.top);
+		ScrollTarget(pageloc, targetRect_.top);
 	}
 	else
 	{
 		pageloc = clientRect_.top - newcl;
-		//dbg_msg("pageloc = %d", pageloc);
-		target_->MoveWindowAsync(target_->rect_.left, pageloc);
+		ScrollTarget(targetRect_.left, pageloc);
 	}
-}
-
-void ScrollWindow::SetTarget(Win32Window* target)
-{
-	target_ = target;
-	target->bScroll_ = true;
-	UpdateScroll();
-	UpdateScrollbar();
-	target_->MoveWindowAsync(clientRect_.left, clientRect_.top);
 }
 
 bool ScrollWindow::VScrollup()
 {
 	if (isVScrolling_ == false) return false;
-	auto trect = target_->rect_;
 
 	auto dy = DpiVal(SCROLLUNITPIXEL);
 	
 	if (isHScrolling_)
 	{
-		dy = std::min(dy, DpiVal(SCROLLBARTHICK) - trect.top);
+		dy = std::min(dy, DpiVal(SCROLLBARTHICK) - targetRect_.top);
 	}
 	else
 	{
-		dy = std::min(dy, -trect.top);
+		dy = std::min(dy, -targetRect_.top);
 	}
-	target_->MoveWindowAsync(trect.left, trect.top + dy);
+	ScrollTarget(targetRect_.left, targetRect_.top + dy);
 
 	return true;
 }
@@ -375,15 +343,14 @@ bool ScrollWindow::VScrollup()
 bool ScrollWindow::VScrolldown()
 {
 	if (isVScrolling_ == false) return false;
-	auto trect = target_->rect_;
 
 	auto h = rect_.height;
 
 	auto dy = -DpiVal(SCROLLUNITPIXEL);
-	auto rest = h - trect.bottom;
+	auto rest = h - targetRect_.bottom;
 	dy = std::max(dy, rest);
 
-	target_->MoveWindowAsync(trect.left, trect.top + dy);
+	ScrollTarget(targetRect_.left, targetRect_.top + dy);
 
 	return true;
 }
@@ -391,18 +358,17 @@ bool ScrollWindow::VScrolldown()
 bool ScrollWindow::HScrollup()
 {
 	if (isHScrolling_ == false) return false;
-	auto trect = target_->rect_;
 
 	auto dx = DpiVal(SCROLLUNITPIXEL);
 	if (isVScrolling_)
 	{
-		dx = std::min(dx, DpiVal(SCROLLBARTHICK) - trect.left);
+		dx = std::min(dx, DpiVal(SCROLLBARTHICK) - targetRect_.left);
 	}
 	else
 	{
-		dx = std::min(dx, -trect.left);
+		dx = std::min(dx, -targetRect_.left);
 	}
-	target_->MoveWindowAsync(trect.left + dx, trect.top);
+	ScrollTarget(targetRect_.left + dx, targetRect_.top);
 
 	return true;
 }
@@ -410,18 +376,19 @@ bool ScrollWindow::HScrollup()
 bool ScrollWindow::HScrolldown()
 {
 	if (isHScrolling_ == false) return false;
-	auto trect = target_->rect_;
 
 	auto w = rect_.width;
 
 	auto dx = -DpiVal(SCROLLUNITPIXEL);
-	auto rest = w - trect.right;
+	auto rest = w - targetRect_.right;
 	dx = std::max(dx, rest);
 
-	target_->MoveWindowAsync(trect.left + dx, trect.top);
+	ScrollTarget(targetRect_.left + dx, targetRect_.top);
 
 	return true;
 }
+
+/*********************************************************************/
 
 /*********************************************************************/
 

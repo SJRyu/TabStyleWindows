@@ -49,6 +49,8 @@ namespace NativeWindows
 		void StopDragging();
 		virtual HWND SetParent(Win32Window* parent) override;
 
+		void SetContent(Win32Window* content);
+
 	protected:
 
 		bool dragging_ = false;

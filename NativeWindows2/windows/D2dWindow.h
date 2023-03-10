@@ -11,6 +11,8 @@ namespace NativeWindows
 	class NATIVEWINDOWS2_API D2dWindow : public Win32Window, public D2dComponents
 	{
 	public:
+		inline D2dWindow() : D2dComponents(this) {}
+
 		inline D2dWindow(WinArgs const& args) :
 			Win32Window(args), D2dComponents(this) {}
 
@@ -48,6 +50,8 @@ namespace NativeWindows
 	class NATIVEWINDOWS2_API D2dWindow1 : public D2dWindow
 	{
 	public:
+		inline D2dWindow1() {}
+
 		inline D2dWindow1(D2dWinArgs const& args) :
 			D2dWindow({ args.rect, args.hmenu, args.parent, args.thread }),
 			d2dparent_(args.parent) {}

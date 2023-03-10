@@ -20,11 +20,15 @@ TabWindow::TabWindow(Ctab* parent) :
 	wstylex_ |= WS_EX_LAYOUTRTL;
 	wstylex_ |= WS_EX_NOINHERITLAYOUT;
 #endif
-	//wstyle_ |= WS_CLIPSIBLINGS;
 }
 
 TabWindow::~TabWindow()
 {
+}
+
+void TabWindow::SetContent(Win32Window* content)
+{
+	client_->SetContent(content);
 }
 
 VOID TabWindow::OnClose1()

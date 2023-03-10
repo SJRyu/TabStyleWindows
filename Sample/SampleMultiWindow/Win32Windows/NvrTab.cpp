@@ -17,7 +17,7 @@ NvrTab::NvrTab(Ctab* parent) : TabWindow(parent)
 	{
 		NvrTab* tab = (NvrTab*)sender;
 		auto content = new NvrWindow(tab);
-		tab->client_->content_ = wunique_ptr<Win32Window>(content);
+		tab->SetContent(content);
 
 		auto count = MyApp::UpCountTab();
 		sender->title_ += std::to_wstring(count);

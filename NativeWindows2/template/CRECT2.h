@@ -45,17 +45,6 @@ namespace Ctemplates
 		inline CRECT(T l, T t, T r, T b) : Rect_t<T>{ l, t, r, b } {}
 
 		inline CRECT(const Rect_t<T>& rect) : Rect_t<T>(rect) {}
-		inline CRECT(Rect_t<T>* rect) 
-		{
-			if (rect)
-			{
-				left = rect->left; top = rect->top; right = rect->right; bottom = rect->bottom;
-			}
-			else
-			{
-				left = 0; top = 0; right = 0; bottom = 0;
-			}
-		}
 
 		template <typename U>
 		CRECT(const Rect_t<U>& rect) :
@@ -65,33 +54,8 @@ namespace Ctemplates
 		CRECT(const CRECT<U>& rect) :
 			Rect_t<T>{ (T)rect.left, (T)rect.top, (T)rect.right, (T)rect.bottom } {}
 
-		template <typename U>
-		CRECT(Rect_t<U>* rect) 
-		{
-			if (rect)
-			{
-				left = (T)rect->left; top = (T)rect->top; right = (T)rect->right; bottom = (T)rect->bottom;
-			}
-			else
-			{
-				left = 0; top = 0; right = 0; bottom = 0;
-			}
-		}
-
 		inline CRECT(WINPOS const& pos) :
 			CRECT{ (T)pos.x, (T)pos.y, (T)(pos.x + pos.cx), (T)(pos.y + pos.cy) } {}
-
-		inline CRECT(WINPOS* pos)
-		{
-			if (pos)
-			{
-				left = (T)pos->x; top = (T)pos->y; right = (T)(pos->x + pos->cx); bottom = (T)(pos->y + pos->cy);
-			}
-			else
-			{
-				left = 0; top = 0; right = 0; bottom = 0;
-			}
-		}
 
 		inline bool operator==(const CRECT<T>& r)
 		{
