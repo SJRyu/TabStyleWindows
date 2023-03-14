@@ -5,6 +5,7 @@ NativeWindows2/x64
 Sample/x64
 Sample/OnvifDiscoveryCpp/x64
 Sample/SampleMultiWindow/x64
+Sample/DIMGUI/x64
 Sample/wsdiscovery/bin
 Sample/wsdiscovery/obj
 
@@ -14,3 +15,4 @@ Sample/wsdiscovery/obj
 *.o
 *.log
 *.tlog
+/Sample/SampleMultiWindow/imgui.ini
