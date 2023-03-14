@@ -63,6 +63,12 @@
     <ClInclude Include="Win32Windows\TestWindow1.h">
       <Filter>소스 파일\Win32Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Win32Windows\HostDIMG.h">
+      <Filter>소스 파일\Win32Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Win32Windows\TabIMGUI.h">
+      <Filter>소스 파일\Win32Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SampleMultiWindow.cpp">
@@ -99,6 +105,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Win32Windows\TestWindow1.cpp">
+      <Filter>소스 파일\Win32Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32Windows\HostDIMG.cpp">
+      <Filter>소스 파일\Win32Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Win32Windows\TabIMGUI.cpp">
       <Filter>소스 파일\Win32Windows</Filter>
     </ClCompile>
   </ItemGroup>

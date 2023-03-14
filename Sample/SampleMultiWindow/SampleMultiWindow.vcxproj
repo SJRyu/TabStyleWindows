@@ -115,7 +115,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(SolutionDir)Sample\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(ProjectDir);$(SolutionDir)Sample\;$(SolutionDir)Sample\DIMGUI\imgui\;$(SolutionDir)Sample\DIMGUI\imgui\backends\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4251;4100</DisableSpecificWarnings>
@@ -124,7 +124,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Shcore.lib;WindowsApp.lib;dwmapi.lib;OnvifDiscoveryCpp.lib;Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shcore.lib;WindowsApp.lib;dwmapi.lib;OnvifDiscoveryCpp.lib;Shlwapi.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>app.manifest%(AdditionalManifestFiles)</AdditionalManifestFiles>
@@ -161,8 +161,10 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Win32Windows\HostDIMG.h" />
     <ClInclude Include="Win32Windows\NvrTab.h" />
     <ClInclude Include="Win32Windows\NvrWindow.h" />
+    <ClInclude Include="Win32Windows\TabIMGUI.h" />
     <ClInclude Include="Win32Windows\TestTab.h" />
     <ClInclude Include="Win32Windows\TestWindow.h" />
     <ClInclude Include="Win32Windows\TestWindow1.h" />
@@ -178,8 +180,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SampleMultiWindow.cpp" />
+    <ClCompile Include="Win32Windows\HostDIMG.cpp" />
     <ClCompile Include="Win32Windows\NvrTab.cpp" />
     <ClCompile Include="Win32Windows\NvrWindow.cpp" />
+    <ClCompile Include="Win32Windows\TabIMGUI.cpp" />
     <ClCompile Include="Win32Windows\TestTab.cpp" />
     <ClCompile Include="Win32Windows\TestWindow.cpp" />
     <ClCompile Include="Win32Windows\TestWindow1.cpp" />
@@ -198,6 +202,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\NativeWindows2\NativeWindows2.vcxproj">
       <Project>{3cf27006-50b1-41a5-a5f7-634e8ebd9c44}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\DIMGUI\DIMGUI.vcxproj">
+      <Project>{39c9a619-ab6b-484a-a954-8f73e82e6796}</Project>
     </ProjectReference>
     <ProjectReference Include="..\OnvifDiscoveryCpp\OnvifDiscoveryCppWrapper.vcxproj">
       <Project>{869a683d-2e99-47e0-b09f-b7264ac99a28}</Project>

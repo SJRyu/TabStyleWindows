@@ -10,6 +10,7 @@
 #include <NativeWindows2/windows/CButton.h>
 #include <Win32Windows/TestTab.h>
 #include <AssetManager.h>
+#include <Win32Windows/TabIMGUI.h>
 
 using namespace NativeWindows;
 using namespace winrt;
@@ -45,8 +46,10 @@ void MyApp::OnAppStart()
 	auto win = NewContainer(rect);
 	auto ctab = win->ctab_.get();
 
-	NvrTab* ntab = new NvrTab(ctab);
-	ctab->PostAdd((TabWindow*)ntab);
+	//NvrTab* ntab = new NvrTab(ctab);
+	//ctab->PostAdd(ntab);
+	TabIMGUI* tab = new TabIMGUI(ctab);
+	ctab->PostAdd(tab);
 }
 
 void MyApp::OnAppEnd()
@@ -61,7 +64,7 @@ void MyApp::OnNewContainer(ContainerWindow* win)
 	{
 		Ctab* ctab = (Ctab*)btn->parent_;
 		NvrTab* ntab = new NvrTab(ctab);
-		ctab->PostAdd((TabWindow*)ntab);
+		ctab->PostAdd(ntab);
 	};
 	btnadd->ShowWindow();
 }
