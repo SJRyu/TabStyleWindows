@@ -163,7 +163,7 @@ namespace NativeWindows
 			assert(hwnd_ == hwnd);
 		}
 
-		void CreateEx1();
+		virtual void CreateEx1();
 		void WaitClose();
 
 		template <typename T> auto DpiVal(T val)
@@ -233,9 +233,7 @@ namespace NativeWindows
 			return DefWindowProc(hWnd, uMsg, wParam, lParam);
 		}
 
-	private:
-
-		com_ptr<IDXGISwapChain4> swapchain_;
+		//com_ptr<IDXGISwapChain4> swapchain_;
 
 #if 0
 		static BOOL CALLBACK EnumChildOnDpichanged(HWND hwnd, LPARAM lparam)
@@ -302,8 +300,8 @@ namespace NativeWindows
 		static LRESULT CALLBACK PreProc_(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK PreProcForRoot_(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-		LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-		LRESULT CALLBACK WndProcForRoot(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		virtual LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		virtual LRESULT CALLBACK WndProcForRoot(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	};
 
 	struct Deleter

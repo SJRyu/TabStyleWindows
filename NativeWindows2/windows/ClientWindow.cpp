@@ -88,3 +88,26 @@ LRESULT ClientScroll::OnSize(WPARAM state, int width, int height)
 
 	return 0;
 }
+
+void ClientWindow1::OnClose1()
+{
+	content_->WaitClose();
+	SafeDelete(&content_);
+}
+
+LRESULT ClientWindow1::OnCreate1(LPCREATESTRUCT createstr)
+{
+	visualbg_ = AddColorVisual(Windows::UI::Colors::White());
+
+	RECT rc{ 0, 0, rect_.width, rect_.height };
+	content_->SetWindowArgs(WinArgs{ &rc, 0, this, content_->thread_ });
+	content_->CreateEx1();
+
+	return 0;
+}
+
+LRESULT ClientWindow1::OnSize(WPARAM state, int width, int height)
+{
+	::PostMessage(content_->hwnd_, UM_CLIENT_RESIZE, (WPARAM)width, (LPARAM)height);
+	return 0;
+}

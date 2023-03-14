@@ -79,42 +79,7 @@ static __forceinline auto CreateVirtualDrawingSurface(
 
     return surface;
 }
-#if 0
-static __forceinline auto SurfaceBeginDraw(CompositionDrawingSurface const& surface, POINT* offset)
-{
-    auto surfaceInterop = surface.as<abicomp::ICompositionDrawingSurfaceInterop>();
 
-    com_ptr<ID2D1DeviceContext> context;
-
-    check_hresult(surfaceInterop->BeginDraw(nullptr, __uuidof(context.get()), context.put_void(), offset));
-    context->SetTransform(D2D1::Matrix3x2F::Translation((FLOAT)offset->x, (FLOAT)offset->y));
-
-    return context;
-}
-
-static __forceinline void SurfaceEndDraw(CompositionDrawingSurface const& surface)
-{
-    auto surfaceInterop = surface.as<abicomp::ICompositionDrawingSurfaceInterop>();
-
-    check_hresult(surfaceInterop->EndDraw());
-}
-
-static __forceinline auto SurfaceBeginDraw1(
-    abicomp::ICompositionDrawingSurfaceInterop* surfaceInterop, POINT* offset)
-{
-    com_ptr<ID2D1DeviceContext> context;
-
-    check_hresult(surfaceInterop->BeginDraw(nullptr, __uuidof(context.get()), context.put_void(), offset));
-    context->SetTransform(D2D1::Matrix3x2F::Translation((FLOAT)offset->x, (FLOAT)offset->y));
-
-    return context;
-}
-
-static __forceinline void SurfaceEndDraw1(abicomp::ICompositionDrawingSurfaceInterop* surfaceInterop)
-{
-    check_hresult(surfaceInterop->EndDraw());
-}
-#endif
 static __forceinline auto CreateCompositionSurfaceForSwapChain(Compositor const& compositor, ::IUnknown* swapChain)
 {
     ICompositionSurface surface{ nullptr };

@@ -268,7 +268,7 @@ void ScrollWindow::UpdateScroll()
 		}
 	}
 
-	if (isVScrolling_ && (targetRect_.bottom < clientRect_.bottom))
+	if (targetRect_.bottom < clientRect_.bottom)
 	{
 		dy = clientRect_.bottom - targetRect_.bottom;
 	}
@@ -278,7 +278,7 @@ void ScrollWindow::UpdateScroll()
 		dy = clientRect_.top - targetRect_.top;
 	}
 
-	if (isHScrolling_ && (targetRect_.right < clientRect_.right))
+	if (targetRect_.right < clientRect_.right)
 	{
 		dx = clientRect_.right - targetRect_.right;
 	}

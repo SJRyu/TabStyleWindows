@@ -43,7 +43,7 @@ namespace NativeWindows
 				D3D11_CREATE_DEVICE_SINGLETHREADED |
 				D3D11_CREATE_DEVICE_BGRA_SUPPORT |
 				D3D11_CREATE_DEVICE_VIDEO_SUPPORT);
-			HR(dxgiDevice_->SetMaximumFrameLatency(16));
+			HR(dxgiDevice_->SetMaximumFrameLatency(1));
 
 			CreateCompositor();
 		}

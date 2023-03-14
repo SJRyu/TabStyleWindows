@@ -28,6 +28,21 @@ namespace NativeWindows
 		virtual void CreateEx() override;
 		virtual HWND SetParent(Win32Window* parent) override;
 
+		virtual BOOL WINAPI ShowWindow(int nCmdShow = SW_SHOW) override
+		{
+			OnShowWindow(this, nCmdShow);
+			return Win32Window::ShowWindow(nCmdShow);
+		}
+
+		virtual BOOL WINAPI ShowWindowAsync(int nCmdShow = SW_SHOW) override
+		{
+			OnShowWindow(this, nCmdShow);
+			return Win32Window::ShowWindowAsync(nCmdShow);
+		}
+
+		std::function<void(ClientWindow*, int)> OnShowWindow = 
+			[](ClientWindow*, int) {};
+
 	protected:
 
 		Win32Window* content_ = nullptr;
@@ -37,6 +52,19 @@ namespace NativeWindows
 		virtual LRESULT CALLBACK OnSize(WPARAM state, int width, int height) override;
 		virtual void CALLBACK OnClose1() override;
 
+	};
+
+	class NATIVEWINDOWS2_API ClientWindow1 : public ClientWindow
+	{
+	public:
+		ClientWindow1(TabWindow* tab) : ClientWindow(tab) {}
+		virtual ~ClientWindow1() {}
+
+	protected:
+
+		virtual LRESULT CALLBACK OnCreate1(LPCREATESTRUCT createstr) override;
+		virtual LRESULT CALLBACK OnSize(WPARAM state, int width, int height) override;
+		virtual void CALLBACK OnClose1() override;
 	};
 
 	class NATIVEWINDOWS2_API ClientScroll : public ScrollWindow

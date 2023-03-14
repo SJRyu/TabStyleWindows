@@ -33,9 +33,9 @@ namespace NativeWindows
 		virtual ~TabWindow();
 
 		wunique_ptr<ClientWindow> client_;
+		virtual void SetClient();
 
 		void ResizeClient();
-
 		void WINAPI SetActivate(hoverstatus stat);
 		void Reposition();
 

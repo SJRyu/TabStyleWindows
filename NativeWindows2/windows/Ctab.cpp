@@ -249,7 +249,8 @@ bool Ctab::InsertTab(TabWindow* tab)
 			0, ncm_->captionh,
 			refcontainer_->rect_.width,
 			refcontainer_->rect_.height - ncm_->captionh,
-			SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOREDRAW1);
+			SWP_NOACTIVATE | SWP_NOREDRAW1);
+		tab->client_->ShowWindow();
 
 		tabs_.push_back(wunique_ptr<TabWindow>(tab));
 		if (old)

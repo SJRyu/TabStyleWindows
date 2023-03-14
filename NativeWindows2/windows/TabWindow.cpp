@@ -62,6 +62,11 @@ void TabWindow::CreateEx()
 	Win32Window::CreateEx();
 }
 
+void TabWindow::SetClient()
+{
+	client_ = wmake_unique<ClientWindow>(this);
+}
+
 LRESULT TabWindow::OnCreate1(LPCREATESTRUCT createstr)
 {
 	float w = (float)rect_.width, h = (float)rect_.height;
@@ -149,7 +154,7 @@ LRESULT TabWindow::OnCreate1(LPCREATESTRUCT createstr)
 	bgvisual_.Shadow(shadow_);
 #endif
 
-	client_ = wmake_unique<ClientWindow>(this);
+	SetClient();
 	OnSetup(this);
 	client_->CreateEx();
 
@@ -391,7 +396,8 @@ void TabWindow::SetActivate(hoverstatus stat)
 			0, ncm_->captionh,
 			refcontainer_->rect_.width,
 			refcontainer_->rect_.height - ncm_->captionh,
-			SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOREDRAW1);
+			SWP_NOACTIVATE | SWP_NOREDRAW1);
+		client_->ShowWindow();
 	}
 	break;
 	case hover_hovering:

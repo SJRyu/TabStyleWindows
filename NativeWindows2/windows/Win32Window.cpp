@@ -203,7 +203,7 @@ LRESULT Win32Window::OnNcCreate_(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		AdjustNcSize(dpi, ncm_);
 
 		auto sc = thread_->Res()->TestSwapchainForHwnd(hWnd);
-		sc->QueryInterface(swapchain_.put());
+		//sc->QueryInterface(swapchain_.put());
 		sc->Release();
 
 		oldproc_ = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)PreProcForRoot_);
@@ -362,10 +362,6 @@ LRESULT Win32Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_DPICHANGED_AFTERPARENT:
 	{
 		PostMessage(hwnd_, UM_DPICHANGED_AFTERPARENT, 0, 0);
-		break;
-	}
-	case WM_SHOWWINDOW:
-	{
 		break;
 	}
 	case WM_CREATE:

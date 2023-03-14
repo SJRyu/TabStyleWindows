@@ -46,7 +46,7 @@ namespace NativeWindows
 		void ReleaseCompositor();
 		void ReleaseCompositor1();
 
-		inline Windows::UI::Composition::Compositor Compositor()
+		inline auto& Compositor()
 		{
 			return refres_->compositor_;
 		}
@@ -216,7 +216,7 @@ namespace NativeWindows
 			//surface 사이즈가 0일때, 에러가 리턴된다. 릴리즈에서는 현재의 예외출력이 아닌 드로우가 완료된것으로 처리해야 한다.
 			auto interop = surface.as<abicomp::ICompositionDrawingSurfaceInterop>();
 			HR(interop->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), (void**)d2dc, &offset_));
-
+			
 			(*d2dc)->SetTransform(D2D1::Matrix3x2F::Translation((FLOAT)offset_.x, (FLOAT)offset_.y));
 		}
 
